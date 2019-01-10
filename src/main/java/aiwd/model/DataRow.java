@@ -69,4 +69,16 @@ public class DataRow {
                 ", outCount=" + outCount +
                 '}';
     }
+
+    public Date getDateAndTime() {
+        return dateAndTime;
+    }
+
+    public int getInCount() {
+        return inCount;
+    }
+
+    public int getOutCount() {
+        return outCount;
+    }
 }

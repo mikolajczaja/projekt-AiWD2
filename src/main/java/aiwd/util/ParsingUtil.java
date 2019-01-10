@@ -19,7 +19,7 @@ public class ParsingUtil {
 
     public static Date parseDate(String dateString) throws ParseException, MissingArgumentException {
         if (!StringUtils.isEmpty(dateString)) {
-            Date date = new SimpleDateFormat("dd/MM/yy").parse(dateString);
+            Date date = new SimpleDateFormat("MM/dd/yy").parse(dateString);
             return date;
         }
         throw new MissingArgumentException("date missing");
@@ -42,7 +42,7 @@ public class ParsingUtil {
 
     public static Date parseDateAndTime(String dateString, String timeString) throws ParseException, MissingArgumentException {
         if ((!StringUtils.isEmpty(dateString)) && (!StringUtils.isEmpty(timeString))) {
-            return new SimpleDateFormat("dd/MM/yy HH:mm:ss").parse(dateString + " " + timeString);
+            return new SimpleDateFormat("MM/dd/yy HH:mm:ss").parse(dateString + " " + timeString);
         }
         throw new MissingArgumentException("date missing");
     }
