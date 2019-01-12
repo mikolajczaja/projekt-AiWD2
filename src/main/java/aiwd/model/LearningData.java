@@ -1,14 +1,16 @@
 package aiwd.model;
 
-import java.util.Date;
-import java.util.Objects;
+import aiwd.artificialNeuralNetwork.DataList;
 
-public class LearningData {
+import java.time.LocalDateTime;
+import java.util.*;
 
-    private Date dateAndTime;
-    private int inCount = 0;
-    private int outCount = 0;
-    private int isEvent;
+public class LearningData implements DataList {
+
+    protected Date dateAndTime;
+    protected int inCount = 0;
+    protected int outCount = 0;
+    protected int isEvent;
 
     public LearningData(Date dateAndTime, int inCount, int outCount, int isEvent) {
         this.dateAndTime = dateAndTime;
@@ -35,6 +37,22 @@ public class LearningData {
 
     public double[] getValues(){
         return new double[]{dateAndTime.getTime(),inCount, outCount, isEvent};
+    }
+    public List<Double> getValueList(){
+        List<Double> values = new ArrayList<>();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dateAndTime);
+
+//        values.add((double) cal.get(Calendar.DAY_OF_MONTH));
+//        values.add((double) cal.get(Calendar.MONTH));
+//        values.add((double) cal.get(Calendar.DAY_OF_WEEK));
+//        values.add((double) cal.get(Calendar.HOUR_OF_DAY));
+//        values.add((double) cal.get(Calendar.MINUTE));
+//        //values.add((double) dateAndTime.getTime());
+//        values.add((double) inCount);
+        values.add((double) outCount);
+        values.add((double) isEvent);
+        return values;
     }
 
     @Override
