@@ -148,12 +148,12 @@ public class NeuralNetwork {
         }
     }
 
-    public void learn(List<DataList> learningDataList, List<DataList> resultDataList) {
-        for (int i = 0; i < learningDataList.size(); i++) {
-            provideInputData(learningDataList.get(i).getValueList());
+    public void learn(List<DataVector> learningDataVector, List<DataVector> resultDataVector) {
+        for (int i = 0; i < learningDataVector.size(); i++) {
+            provideInputData(learningDataVector.get(i).getValueList());
             network.forEach(neuronsLayer -> neuronsLayer.forEach(neuron -> neuron.execute()));
             outputLayer.forEach(neuron -> neuron.execute());
-            countErrorSignalForOutputLayer(resultDataList.get(i));
+            countErrorSignalForOutputLayer(resultDataVector.get(i));
             countErrorSignalForInnerLayers();
             adjustWeights(outputLayer);
             network.forEach(l -> adjustWeights(l));
@@ -199,8 +199,8 @@ public class NeuralNetwork {
         }
     }
 
-    private void countErrorSignalForOutputLayer(DataList resultDataList) {
-        List<Double> targetValueList = resultDataList.getValueList();
+    private void countErrorSignalForOutputLayer(DataVector resultDataVector) {
+        List<Double> targetValueList = resultDataVector.getValueList();
         for (int i = 0; i < outputLayer.size(); i++) {
             Neuron neuron = outputLayer.get(i);
             neuron.propagateErrorSignal((neuron.getOutput() - targetValueList.get(i)) * transferDerivative(neuron.getOutput()));

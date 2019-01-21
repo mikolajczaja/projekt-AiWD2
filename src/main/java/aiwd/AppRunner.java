@@ -1,6 +1,6 @@
 package aiwd;
 
-import aiwd.artificialNeuralNetwork.DataList;
+import aiwd.artificialNeuralNetwork.DataVector;
 import aiwd.artificialNeuralNetwork.NeuralNetwork;
 import aiwd.artificialNeuralNetwork.NeuralNetworkProperties;
 import aiwd.loader.DataLoader;
@@ -9,7 +9,6 @@ import aiwd.model.EventData;
 import aiwd.model.LearningData;
 import aiwd.model.ResultData;
 
-import javax.xml.crypto.Data;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,8 +19,8 @@ public class AppRunner {
         LinkedList<EventData> eventDataList = DataLoader.loadEventData("events.csv");
 
         List<LearningData> learningData = prepareLearningDataList(dataRows, eventDataList);
-        List<DataList> resultData = prepareResultList(learningData);
-        List<DataList> ld = new ArrayList<>(learningData);
+        List<DataVector> resultData = prepareResultList(learningData);
+        List<DataVector> ld = new ArrayList<>(learningData);
 
         //learningData.remove(learningData.size() - 1);
         //resultData.remove(0);
@@ -45,7 +44,7 @@ public class AppRunner {
         neuralNetwork.learn(ld, resultData);
     }
 
-    private static List<DataList> prepareResultList(List<LearningData> learningData) {
+    private static List<DataVector> prepareResultList(List<LearningData> learningData) {
         return learningData
                 .stream()
                 .map(l -> new ResultData(l.getDateAndTime(), l.getInCount(), l.getOutCount(), l.getIsEvent()))

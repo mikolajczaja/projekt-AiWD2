@@ -2,6 +2,6 @@ package aiwd.artificialNeuralNetwork;
 
 import java.util.List;
 
-public interface DataList {
+public interface DataVector {
     List<Double> getValueList();
 }

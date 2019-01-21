@@ -1,11 +1,10 @@
 package aiwd.model;
 
-import aiwd.artificialNeuralNetwork.DataList;
+import aiwd.artificialNeuralNetwork.DataVector;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
-public class LearningData implements DataList {
+public class LearningData implements DataVector {
 
     protected Date dateAndTime;
     protected int inCount = 0;
@@ -38,6 +37,7 @@ public class LearningData implements DataList {
     public double[] getValues(){
         return new double[]{dateAndTime.getTime(),inCount, outCount, isEvent};
     }
+
     public List<Double> getValueList(){
         List<Double> values = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
