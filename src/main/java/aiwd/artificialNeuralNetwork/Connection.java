@@ -1,6 +1,6 @@
 package aiwd.artificialNeuralNetwork;
 
-public class Connection {
+class Connection {
 
     private Neuron neuron;
 
@@ -8,7 +8,7 @@ public class Connection {
 
     private double errorPropagationSignal;
 
-    public Connection(Neuron neuron) {
+    Connection(Neuron neuron) {
         this.neuron = neuron;
     }
 

@@ -12,7 +12,8 @@ public class MinMaxDataNormalization
 
     private List<MinMaxForColumn> columnsData;
     private List<Integer> columnsToNormalize;
-    private boolean normalized = false;
+
+    private MinMaxDataNormalization(){}
 
     public MinMaxDataNormalization(Integer... columnsToNormalize){
         this.columnsToNormalize = Arrays.asList(columnsToNormalize);
@@ -20,7 +21,7 @@ public class MinMaxDataNormalization
     }
 
     public List<DataVector> denormalizeData(List<DataVector> normalizedData){
-        if(validateDataToDenormalization(normalizedData)) {
+        if(validateData(normalizedData)) {
             return new ArrayList<>();
         }
         return denormalize(normalizedData);
@@ -37,7 +38,7 @@ public class MinMaxDataNormalization
 
     private NormalizedData denormalizeVector(DataVector normalizedVector) {
         NormalizedData denormalizedVector = new NormalizedData();
-        for(int i = 0; i < columnsToNormalize.size(); i++){
+        for(int i = 0; i < normalizedVector.getValueList().size(); i++){
             if(columnsToNormalize.contains(i)){
                 denormalizedVector.addData(normalizedVector.getValueList().get(i)
                         * (columnsData.get(i).getMax() - columnsData.get(i).getMin()) + columnsData.get(i).getMin());
@@ -49,21 +50,50 @@ public class MinMaxDataNormalization
     }
 
     public List<DataVector> normalizeData(List<DataVector> dataVectors){
-        if (validateDataToNormalization(dataVectors)) {
+        if (validateData(dataVectors)) {
             return new ArrayList<>();
         }
         createColumnsData(dataVectors);
         initializeColumnsData(dataVectors);
-        this.normalized = !this.normalized;
         return normalize(dataVectors);
     }
 
-    private boolean validateDataToNormalization(List<DataVector> dataVectors) {
-        return dataVectors == null || dataVectors.isEmpty() || columnsToNormalize.isEmpty() || normalized;
+    public DataVector normalizeDataVector(DataVector dataVector){
+        if(validateData(Arrays.asList(dataVector))){
+            return new NormalizedData();
+        }
+        return countMinMaxNormalizationForVector(dataVector);
     }
 
-    private boolean validateDataToDenormalization(List<DataVector> dataVectors) {
-        return dataVectors == null || dataVectors.isEmpty() || columnsToNormalize.isEmpty() || !normalized;
+    public DataVector denormalizeDataVector(DataVector dataVector){
+        if(validateData(Arrays.asList(dataVector))){
+            return new NormalizedData();
+        }
+        return denormalizeVector(dataVector);
+    }
+
+    private boolean validateData(List<DataVector> dataVectors) {
+        return dataVectors == null || dataVectors.isEmpty() ||
+                validateValueListOfDataVectors(dataVectors) ||
+                validateColumnsToNormalize(dataVectors.get(0).getValueList().size()) ||
+                columnsToNormalize.isEmpty();
+    }
+
+    private boolean validateValueListOfDataVectors(List<DataVector> dataVectors){
+        for (DataVector dataVector : dataVectors) {
+            if(dataVector.getValueList() == null || dataVector.getValueList().isEmpty()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean validateColumnsToNormalize(Integer numberOfColumns){
+        for (Integer columnNumber : columnsToNormalize) {
+            if(columnNumber < 0 || columnNumber > numberOfColumns)
+                return true;
+        }
+        return false;
     }
 
     private List<DataVector> normalize(List<DataVector> dataVectors) {
@@ -79,8 +109,8 @@ public class MinMaxDataNormalization
         NormalizedData newVector = new NormalizedData();
         for (int i = 0; i < dataVector.getValueList().size(); i++){
             if(columnsToNormalize.contains(i)) {
-                newVector.addData(dataVector.getValueList().get(i) - columnsData.get(i).getMin()
-                        / columnsData.get(i).getMax() - columnsData.get(i).getMin());
+                newVector.addData((dataVector.getValueList().get(i) - columnsData.get(i).getMin())
+                        / (columnsData.get(i).getMax() - columnsData.get(i).getMin()));
 
             }else {
                 newVector.addData(dataVector.getValueList().get(i));

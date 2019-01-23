@@ -6,13 +6,15 @@ import aiwd.artificialNeuralNetwork.DataVector;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NormalizedData implements DataVector {
+ class NormalizedData implements DataVector {
 
     private List<Double> data = new ArrayList<>();
 
+    NormalizedData(){}
+
     @Override
     public List<Double> getValueList() {
-        return null;
+        return data;
     }
 
     public void addData(Double normalizedData){

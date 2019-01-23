@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Neuron {
+class Neuron {
 
     private ArrayList<Connection> connections = new ArrayList<>();
 
@@ -13,6 +13,8 @@ public class Neuron {
     private double errorPropagationSignal;
 
     private boolean isBias = false;
+
+    Neuron(){}
 
     public Connection getConnectionForNeuron(Neuron neuron) {
         return connections.stream()

@@ -1,11 +1,11 @@
 package aiwd.artificialNeuralNetwork.dataNormalization;
 
-public class MinMaxForColumn {
+class MinMaxForColumn {
 
     private double max;
     private double min;
 
-    public MinMaxForColumn(double max, double min) {
+    MinMaxForColumn(double max, double min) {
         this.max = max;
         this.min = min;
     }

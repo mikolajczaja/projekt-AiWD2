@@ -3,7 +3,7 @@ package aiwd.artificialNeuralNetwork;
 public class NeuralNetworkProperties {
 
     private int numberOfInputs;
-    private int numberOfLayers;
+    private int numberOfHiddenLayers;
     private int numberOfNeuronsPerLayer;
     private int numberOfOutputs;
     private double q = 0.01d;
@@ -35,12 +35,12 @@ public class NeuralNetworkProperties {
         this.numberOfInputs = numberOfInputs;
     }
 
-    public int getNumberOfLayers() {
-        return numberOfLayers;
+    public int getNumberOfHiddenLayers() {
+        return numberOfHiddenLayers;
     }
 
-    public void setNumberOfLayers(int numberOfLayers) {
-        this.numberOfLayers = numberOfLayers;
+    public void setNumberOfHiddenLayers(int numberOfLayers) {
+        this.numberOfHiddenLayers = numberOfLayers;
     }
 
     public int getNumberOfNeuronsPerLayer() {

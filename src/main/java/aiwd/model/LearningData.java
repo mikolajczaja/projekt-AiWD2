@@ -43,13 +43,9 @@ public class LearningData implements DataVector {
         Calendar cal = Calendar.getInstance();
         cal.setTime(dateAndTime);
 
-//        values.add((double) cal.get(Calendar.DAY_OF_MONTH));
-//        values.add((double) cal.get(Calendar.MONTH));
-//        values.add((double) cal.get(Calendar.DAY_OF_WEEK));
-//        values.add((double) cal.get(Calendar.HOUR_OF_DAY));
-//        values.add((double) cal.get(Calendar.MINUTE));
-//        //values.add((double) dateAndTime.getTime());
-//        values.add((double) inCount);
+        values.add((double) cal.get(Calendar.DAY_OF_WEEK));
+        values.add((double) cal.get(Calendar.HOUR_OF_DAY));
+        values.add((double) inCount);
         values.add((double) outCount);
         values.add((double) isEvent);
         return values;
