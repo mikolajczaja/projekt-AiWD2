@@ -55,13 +55,14 @@ class Neuron {
         return sum;
     }
 
-    private double sigmoid(double sum) {
+    private void sigmoid(double sum) {
         output = 1d / (1d + Math.exp(-1d * sum));
-        return output;
     }
 
-    public double execute() {
-        return sigmoid(sum());
+    public void execute() {
+       if(!isBias) {
+           sigmoid(sum());
+       }
     }
 
     public double getErrorPropagationSignal() {

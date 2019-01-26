@@ -10,6 +10,15 @@ public class NeuralNetworkProperties {
     private double biasValue = 1.0d;
     private double weightInitialUpperBound = 0.7d;
     private double weightInitialLowerBound = 0.1d;
+    private boolean bias = true;
+
+    public boolean isBias() {
+        return bias;
+    }
+
+    public void setBias(boolean bias) {
+        this.bias = bias;
+    }
 
     public double getWeightInitialUpperBound() {
         return weightInitialUpperBound;

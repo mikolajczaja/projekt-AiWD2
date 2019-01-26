@@ -26,22 +26,24 @@ public class AppRunner {
         List<DataVector> resultData = prepareResultList(learningData);
         List<DataVector> ld = new ArrayList<>(learningData);
 
-//        ld.remove(ld.size() - 1);
-//        resultData.remove(0);
+        ld.remove(ld.size() - 1);
+        resultData.remove(0);
 
         NeuralNetworkProperties properties = new NeuralNetworkProperties();
         properties.setNumberOfInputs(5);
-        properties.setNumberOfHiddenLayers(2);
-        properties.setNumberOfNeuronsPerLayer(2);
+        properties.setNumberOfHiddenLayers(1);
+        properties.setNumberOfNeuronsPerLayer(5);
         properties.setNumberOfOutputs(1);
         properties.setQ(0.02d);
+        properties.setBias(true);
         properties.setBiasValue(1.0d);
+        properties.setWeightInitialUpperBound(0.6d);
         NeuralNetwork neuralNetwork = new NeuralNetwork(properties);
 
         MinMaxDataNormalization normalization = new MinMaxDataNormalization(0,1,2,3);
         List<DataVector> learningDataNormalized = normalization.normalizeData(ld);
 
-        for(int i = 0; i < 10000; i ++) {
+        for(int i = 0; i < 200; i ++) {
            LearningResults results = neuralNetwork.learn(learningDataNormalized, resultData);
            System.out.println("Iteration " + i + " result " + results.getResult());
         }
@@ -56,12 +58,13 @@ public class AppRunner {
         DataVector eventDataVector = new DataVector() {
             @Override
             public List<Double> getValueList() {
-                return Arrays.asList(4.0,13.0,40.0,2.0,0.0);
+                return Arrays.asList(4.0,12.0,60.0,2.0,0.0);
             }
         };
 
         Double noevent = neuralNetwork.evaluate(normalization.normalizeDataVector(noEventDataVector)).get(0);
         Double event = neuralNetwork.evaluate(normalization.normalizeDataVector(eventDataVector)).get(0);
+
     }
 
     private static List<DataVector> prepareResultList(List<LearningData> learningData) {

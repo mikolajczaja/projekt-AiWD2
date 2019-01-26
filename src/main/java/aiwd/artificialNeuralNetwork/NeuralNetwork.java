@@ -20,6 +20,8 @@ public class NeuralNetwork {
 
     private double biasValue;
 
+    private boolean isBias;
+
     private ArrayList<Neuron> inputLayer = new ArrayList<>();
 
     private LinkedList<ArrayList<Neuron>> network = new LinkedList<>();
@@ -38,25 +40,34 @@ public class NeuralNetwork {
         biasValue = properties.getBiasValue();
         weightInitialLowerBound = properties.getWeightInitialLowerBound();
         weightInitialUpperBound = properties.getWeightInitialUpperBound();
-        addBiasToNeuralNetwork();
+        isBias = properties.isBias();
+        if(properties.isBias()) {
+            addBiasToNeuralNetwork();
+        }
         initializeWeightsForNeuralNetwork();
     }
 
     private void initializeWeightsForNeuralNetwork() {
         initializeWeights(outputLayer);
-        network.forEach(layer -> initializeWeights(layer));
+        network.forEach(this::initializeWeights);
     }
 
     private void addBiasToNeuralNetwork(){
-        network.forEach(layer -> layer.forEach(neuron -> addBias(neuron)));
-        outputLayer.forEach(n -> addBias(n));
+        inputLayer.add(addBias(network.getFirst()));
+        for (int i = 1; i < network.size(); i++) {
+            network.get(i - 1).add(addBias(network.get(i)));
+        }
+        network.getLast().add(addBias(outputLayer));
     }
 
-    private void addBias(Neuron neuron) {
+    private Neuron addBias(List<Neuron> layer){
         Neuron bias = new Neuron();
         bias.setOutput(this.biasValue);
         bias.setBias(true);
-        neuron.addConnection(bias);
+        for (Neuron neuron : layer) {
+            neuron.addConnection(bias);
+        }
+        return bias;
     }
 
     private void initializeInputLayer(int numberOfNeurons) {
@@ -147,7 +158,8 @@ public class NeuralNetwork {
     }
 
     public void provideInputData(List<Double> values) {
-        for (int i = 0; i < inputLayer.size(); i++) {
+        int inputLayerSize = (isBias)? inputLayer.size() - 1 : inputLayer.size();
+        for (int i = 0; i < inputLayerSize; i++) {
             inputLayer.get(i).setOutput(values.get(i));
         }
     }
@@ -192,6 +204,7 @@ public class NeuralNetwork {
     private void countErrorPropagationForNeuron(Neuron neuron, List<Neuron> neuronsFromNextLayer) {
         List<Connection> connectionsToNextLayer = neuronsFromNextLayer.stream()
                 .map(n -> n.getConnectionForNeuron(neuron))
+                .filter(n -> n!=null)
                 .collect(Collectors.toList());
         double sum = countSumForLayer(connectionsToNextLayer);
         neuron.propagateErrorSignal(sum * transferDerivative(neuron.getOutput()));
@@ -216,8 +229,7 @@ public class NeuralNetwork {
         for (int i = 0; i < outputLayer.size(); i++) {
             Neuron neuron = outputLayer.get(i);
             neuron.propagateErrorSignal((neuron.getOutput() - targetValueList.get(i)) * transferDerivative(neuron.getOutput()));
-            //if(targetValueList.get(i) != 0)
-            //    LOGGER.debug("Parameters: "+ targetValueList.get(i) +" Output value: "+ neuron.getOutput());
+
             if(targetValueList.get(i) - (neuron.getOutput()) > 0.1 ||
                     targetValueList.get(i) - (neuron.getOutput()) < -0.1){
                 learningResults.addBadResult();
